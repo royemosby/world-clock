@@ -98,8 +98,8 @@ var display = {
         group1: { //HAT, AKT, PT, MT, CT, ET, AT, NT
             startDay: 1, // 2nd Sunday in Mar
             endDay: 1, // 1st Sunday in Nov
-            startTime: 2,
-            endTime: 2
+            startTime: 2, //2am
+            endTime: 2 //2am
         },
         group2: { //WET, CET, EET
             startDay: 1, //last Sunday in Mar
@@ -124,21 +124,29 @@ var display = {
 
 ///////////////////////////////////////////////////////////
 
+function find1stSun(date){
 
-
-function getTime() {
-    var date = new Date().getTime();
-    return date;
 }
 
+function find2ndSun(date){
+
+}
+
+function findLastSun(date){
+
+}
+
+
 function setTime() {
-    var utc = getTime();
+    var date = new Date();
+    var month = date.getUTCMonth();
+    var dayOfWeek = date.getUTCDay(); //0 == Sunday
+    var dayOfMonth = date.getUTCDate();
+    var hour = date.getUTCHours();
     WC_Clocks.forEach(function(clock){
+        var savings = 0
         switch(clock.savingsTime){
-            case 'none':
-                break;
             case 'group1':
-                //do something to clock.offset if in range
                 break;
             case 'group2':
                 //do something to clock.offset if in range
@@ -149,8 +157,15 @@ function setTime() {
             case 'group4':
                 //do something to clock.offset if in range
                 break;
+            default:
+                break;
         }
-        clock.time = utc + clock.offset*3600000;
+        var clockTime = new Date(date.getTime() + clock.offset*3600000 + savings);
+        clock.month = clockTime.getUTCMonth();
+        clock.day = clockTime.getUTCDay();
+        clock.hour = clockTime.getUTCHours();
+        clock.minute = clockTime.getUTCMinutes();
+        clock.second = clockTime.getUTCSeconds();
     });
 }
 
