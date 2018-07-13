@@ -144,7 +144,7 @@ function setTime() {
     var dayOfMonth = date.getUTCDate();
     var hour = date.getUTCHours();
     WC_Clocks.forEach(function(clock){
-        var savings = 0
+        var savings = 0;
         switch(clock.savingsTime){
             case 'group1':
                 break;
