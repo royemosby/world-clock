@@ -16,7 +16,7 @@
 // http://www.zip.com.au/~astroboy/liveclock/
 ///////////////////////////////////////////////////////////
 
-var WCDate = new Date();  //place inside init() eventually
+var WC_Date = new Date();  //place inside init() eventually
 
 var WC_Clocks = [
     {
@@ -51,7 +51,7 @@ var WC_Clocks = [
     }
 ];
 
-var display = {
+var WC_display = {
     style: { //push to CSS or display inline?
         font: 'Arial',
         fontSize: '1em',
@@ -90,46 +90,56 @@ var display = {
     // https://en.wikipedia.org/wiki/Template:Daylight_saving_in_time_zone/techdoc
     savingsTime: {
         group1: { //HAT, AKT, PT, MT, CT, ET, AT, NT
-            startDay: find2ndSun(2),
-            endDay: this.find1stSun(10),
             startTime: 2, //2am
             endTime: 2 //2am
         },
         group2: { //WET, CET, EET
-            startDay: this.findLastSun(2), //last Sunday in Mar
+            startDay: findLastSun(2), //last Sunday in Mar
             endDay: this.findLastSun(9),  //last Sunday in Oct
             startTime: 1,
             endTime: 1
         },
         group3: { //ACT, AET
-            startDay: this.find1stSun(9), //1st Sunday in Oct
+            startDay: find1stSun(9), //1st Sunday in Oct
             endDay: this.find1stSun(3), //1st Sunday in Apr
             startTime: 2,
             endTime: 3
         }, 
         group4: { //NZT
-            startDay: this.findLastSun(8), //last Sunday in Sep
-            endDay: this.find1stSun(3), //1st Sunday in Apr
+            startDay: findLastSun(8), //last Sunday in Sep
+            endDay: find1stSun(3), //1st Sunday in Apr
             startTime: 2,
             endTime: 3
-        },
-        find1stSun: function(month){
-
-        },
-        find2ndSun: function(month){
-
-        },
-        findLastSun: function(month){
-
         }
     }
-};
+}
 
 ///////////////////////////////////////////////////////////
+function find1stSun(month){
+    var utilMonth = new Date(date.getYear(), month)
+    return '1st';
+}
+function find2ndSun(month){
+    return '2nd';
+}
+function findLastSun(month){
+    return 'last';
+}
 
+function setSavings(){
+    var savings = WC_display.savingsTime;
+    savings.group1.startDay = find2ndSun(2);
+    savings.group1.endDay = find1stSun(10);
+    savings.group2.startDay = findLastSun(2);
+    savings.group2.endDay = findLastSun(9);
+    savings.group3.startDay = find1stSun(9);
+    savings.group3.endDay = find1stSun(3);
+    savings.group4.startDay = findLastSun(8);
+    savings.group4.endDay = find1stSun(3);
+}
 
 function setTime() {
-    var date = WCDate;
+    var date = WC_Date;
     var month = date.getUTCMonth();
     var dayOfWeek = date.getUTCDay(); //0 == Sunday
     var dayOfMonth = date.getUTCDate();
