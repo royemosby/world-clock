@@ -2,15 +2,13 @@
 - make IIFE
     - internalize clock creation (called repeatedly from a table inside the master page)
 - refactor out old crap
-- move styling out of JS
 - use case switch for time
-- move all config to top
 - update event listener for init
 - think about object for config instead of array
 */
 ///////////////////////////////////////////////////////////
 // World-Clock(1.0) vanilla JS world clock
-// By Roy Mosby (roy.e.mosby@gmail.com)
+// By Roy Mosby (roy.e.mosby@gmail.com) 2018
 // https://github.com/egomadking/world-clock
 
 // Inspired by"Live Clock" script (3.0)
@@ -18,6 +16,7 @@
 // http://www.zip.com.au/~astroboy/liveclock/
 ///////////////////////////////////////////////////////////
 
+var WCDate = new Date();  //place inside init() eventually
 
 var WC_Clocks = [
     {
@@ -53,7 +52,7 @@ var WC_Clocks = [
 ];
 
 var display = {
-    style: { //push to CSS
+    style: { //push to CSS or display inline?
         font: 'Arial',
         fontSize: '1em',
         fontColor: 'black',
@@ -63,11 +62,6 @@ var display = {
     format: {
         clock12Hr: false,
         showSeconds: true,
-        dateFormats: 3,
-            /*''(0) 'dd/mm/yy'(1) yymmdd(2) 
-            dd mmm yy(3) DDDD MMMM(4) DDDD MMMM YYYY(5) */
-        abbreviateDays: true,
-        abbreviateMonths: true
     },
     days: [
         ['Sunday', 'Sun'],
@@ -96,49 +90,46 @@ var display = {
     // https://en.wikipedia.org/wiki/Template:Daylight_saving_in_time_zone/techdoc
     savingsTime: {
         group1: { //HAT, AKT, PT, MT, CT, ET, AT, NT
-            startDay: 1, // 2nd Sunday in Mar
-            endDay: 1, // 1st Sunday in Nov
+            startDay: find2ndSun(2),
+            endDay: this.find1stSun(10),
             startTime: 2, //2am
             endTime: 2 //2am
         },
         group2: { //WET, CET, EET
-            startDay: 1, //last Sunday in Mar
-            endDay: 1,  //last Sunday in Oct
+            startDay: this.findLastSun(2), //last Sunday in Mar
+            endDay: this.findLastSun(9),  //last Sunday in Oct
             startTime: 1,
             endTime: 1
         },
         group3: { //ACT, AET
-            startDay: 1, //1st Sunday in Oct
-            endDay: 1, //1st Sunday in Apr
+            startDay: this.find1stSun(9), //1st Sunday in Oct
+            endDay: this.find1stSun(3), //1st Sunday in Apr
             startTime: 2,
             endTime: 3
         }, 
         group4: { //NZT
-            startDay: 1, //last Sunday in Sep
-            endDay: 1, //1st Sunday in Apr
+            startDay: this.findLastSun(8), //last Sunday in Sep
+            endDay: this.find1stSun(3), //1st Sunday in Apr
             startTime: 2,
             endTime: 3
+        },
+        find1stSun: function(month){
+
+        },
+        find2ndSun: function(month){
+
+        },
+        findLastSun: function(month){
+
         }
     }
 };
 
 ///////////////////////////////////////////////////////////
 
-function find1stSun(date){
-
-}
-
-function find2ndSun(date){
-
-}
-
-function findLastSun(date){
-
-}
-
 
 function setTime() {
-    var date = new Date();
+    var date = WCDate;
     var month = date.getUTCMonth();
     var dayOfWeek = date.getUTCDay(); //0 == Sunday
     var dayOfMonth = date.getUTCDate();
@@ -168,128 +159,3 @@ function setTime() {
         clock.second = clockTime.getUTCSeconds();
     });
 }
-
-function LC_CreateClock(c) {
-    clockTags = '<span id="' + c.Name + '" style="width:' + c.Width + 'px;background-color:' + c.BackColor + ';border-top:1pt solid gray;border-left:1pt solid gray;border-bottom:1pt solid white;border-right:1pt solid white;"></span>';
-    clockTags = '<span id="' + c.Name + '" class="ticktock"></span>';
-}
-
-function LC_InitializeClocks() { //refactor to get rid of eval!
-    for (i = 0; i < LC_Clocks.length; i++) {
-        LC_UpdateClock(i);
-        if (LC_Clocks[i].Update) {
-            eval('var ' + LC_Clocks[i].Name + '=setInterval("LC_UpdateClock("+' + i + '+")",' + LC_ClockUpdate[LC_Clocks[i].Update] + ')');
-        }
-    }
-}
-
-function LC_UpdateClock(Clock) {
-    var c = LC_Clocks[Clock];
-
-    var t = new Date();
-    if (!isNaN(c.GMT)) {
-        var offset = t.getTimezoneOffset();
-        if (navigator.appVersion.indexOf('MSIE 3') != -1) {
-            offset = offset * (-1);
-        }
-        t.setTime(t.getTime() + offset * 60000);
-        t.setTime(t.getTime() + c.GMT * 3600000);
-    }
-    var day = t.getDay();
-    var md = t.getDate();
-    var mnth = t.getMonth();
-    var monthName = LC_MonthsOfYear[mnth];
-    //monthName = monthName.split(",");
-    var hrs = t.getHours();
-    var mins = t.getMinutes();
-    var secs = t.getSeconds();
-    var yr = t.getYear();
-
-    if (yr < 1900) {
-        yr += 1900;
-    }
-
-    var ampm = "";
-    if (c.Hour12 == 1) {
-        ampm = "am";
-        if (hrs >= 12) {
-            ampm = "pm";
-            hrs -= 12;
-        }
-        if (hrs == 0) {
-            hrs = 12;
-        }
-    }
-    if (hrs <= 9) {
-        hrs = "0" + hrs;
-    }
-    if (mins <= 9) {
-        mins = "0" + mins;
-    }
-    if (secs <= 9) {
-        secs = "0" + secs;
-    }
-
-    var html = '';
-    html += c.OpenTags;
-    html += '';
-    html += hrs + ':' + mins;
-    if (c.Update == 1) {
-        html += ':' + secs;
-    }
-    if (c.Hour12) {
-        html += ' ' + ampm;
-    }
-    html += '';
-
-    if (c.DisplayDate == 1) {
-        html += ' ' + md + '/' + (mnth + 1) + '/' + yr;
-    }
-    if (c.DisplayDate == 2) {
-        html += ' ' + (mnth + 1) + '/' + md + '/' + yr;
-    }
-
-    if (c.DisplayDate == 3) {
-        if ((mnth + 1) <= 9) {
-            mnth = "0" + (mnth + 1);
-        }
-        html += ' ' + (mnth) + '/' + md + ' ';
-    }
-
-    if (c.DisplayDate == 4) {
-        //html+=' '+yr;
-    }
-    if (c.DisplayDate > 4) {
-        html += '<br/>' + md + ' ' + monthName + ", " + yr;
-    }
-
-    html += "<font>";
-    html += c.CloseTags;
-
-    document.getElementById(c.Name).innerHTML = html;
-}
-
-
-function LiveClock(a, b, c, d, e, f, g, h, i, j, k, l) {
-    this.Name = 'LiveClock' + LC_Clocks.length;
-
-    this.FntFace = a || LC_Style[0]; //1 Font
-    this.FntSize = b || LC_Style[1]; //2
-    this.FntColor = c || LC_Style[2]; //3
-    this.BackColor = d || LC_Style[3]; //4
-    this.OpenTags = e || LC_Style[4]; //5
-    this.CloseTags = f || LC_Style[5]; //6
-    this.Width = g || LC_Style[6]; //7
-    this.Hour12 = h || LC_Style[7]; //8
-    this.Update = i || LC_Style[8]; //9
-    this.DisplayDate = k; //10 
-    this.Abbreviate = j || LC_Style[10]; //11 Abbreviate y/n
-    this.GMT = l || LC_Style[11]; //12 GMT adjustment
-    LC_Clocks[LC_Clocks.length] = this;
-    LC_CreateClock(this);
-}
-
-///////////////////////////////////////////////////////////
-
-LC_OtherOnloads = (window.onload) ? window.onload : new Function; //old: refactor
-window.onload = LC_InitializeClocks;
