@@ -95,13 +95,13 @@ var WC_display = {
         },
         group2: { //WET, CET, EET
             startDay: findLastSun(2), //last Sunday in Mar
-            endDay: this.findLastSun(9),  //last Sunday in Oct
+            endDay: findLastSun(9),  //last Sunday in Oct
             startTime: 1,
             endTime: 1
         },
         group3: { //ACT, AET
             startDay: find1stSun(9), //1st Sunday in Oct
-            endDay: this.find1stSun(3), //1st Sunday in Apr
+            endDay: find1stSun(3), //1st Sunday in Apr
             startTime: 2,
             endTime: 3
         }, 
@@ -114,28 +114,48 @@ var WC_display = {
     }
 }
 
+function getMonthLen(month) {
+    var date = new Date(month.getUTCFullYear(), month.getUTCMonth()+1, 0);
+    return date.getUTCDate();
+}
+
 ///////////////////////////////////////////////////////////
 function find1stSun(month){
-    var utilMonth = new Date(date.getYear(), month)
+    var utilMonth = new Date(WC_Date.getUTCFullYear(), month);
+    var monthDayStart = utilMonth.getUTCDay();
+    var daysInMonth = getMonthLen(utilMonth);
+    var target;
+    //find lowest UTCdate where day === 0
+    for(var i=0; i<daysInMonth; i++){ 
+        if(monthDayStart+i===0 || monthDayStart+i===7){
+            target = i;
+            console.log(target+' '+utilMonth.getUTCMonth());
+            break;
+        } else {
+            console.log(monthDayStart+i+ ' not sunday');
+        }
+    }
     return '1st';
 }
 function find2ndSun(month){
+    var utilMonth = new Date(WC_Date.getUTCFullYear(), month)
     return '2nd';
 }
 function findLastSun(month){
+    var utilMonth = new Date(WC_Date.getUTCFullYear(), month)
     return 'last';
 }
 
 function setSavings(){
     var savings = WC_display.savingsTime;
     savings.group1.startDay = find2ndSun(2);
-    savings.group1.endDay = find1stSun(10);
+    savings.group1.endDay = find1stSun(10);  //was 10
     savings.group2.startDay = findLastSun(2);
     savings.group2.endDay = findLastSun(9);
     savings.group3.startDay = find1stSun(9);
-    savings.group3.endDay = find1stSun(3);
+    savings.group3.endDay = find1stSun(3); //was 3
     savings.group4.startDay = findLastSun(8);
-    savings.group4.endDay = find1stSun(3);
+    savings.group4.endDay = find1stSun(3); //was 3
 }
 
 function setTime() {
