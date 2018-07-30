@@ -1,7 +1,5 @@
 /*
 - make IIFE
-    - internalize clock creation (called repeatedly from a table inside the master page)
-- update event listener for init
 */
 ///////////////////////////////////////////////////////////
 // World-Clock(1.0) vanilla JS world clock
