@@ -16,34 +16,35 @@
 
 var WC_Date = new Date(); //place inside init() eventually
 var WC_Year = WC_Date.getUTCFullYear();
+var savings = 0;
 
 var WC_Clocks = [
   {
-    region: 'Coordinated Universal Time',
+    region: ['UTC', 'UTC'],
     location: 'UTC',
     offset: 0,
     savingsTime: 'none'
   },
   {
-    region: 'Eastern Time',
+    region: ['EST', 'EDT'],
     location: 'Shaw AFB',
     offset: -5,
     savingsTime: 'group1'
   },
   {
-    region: 'Pacific Time',
+    region: ['PST', 'PDT'],
     location: 'Travis AFB',
     offset: -8,
     savingsTime: 'group1'
   },
   {
-    region: 'Arabia Time',
+    region: ['AT', 'AT'],
     location: 'Al Udeid',
     offset: 3,
-    savingsTime: 'group1'
+    savingsTime: 'none'
   },
   {
-    region: 'Afghanistan Time',
+    region: ['AFT', 'AFT'],
     location: 'Kabul',
     offset: 4.5,
     savingsTime: 'none'
@@ -51,16 +52,8 @@ var WC_Clocks = [
 ];
 
 var WC_display = {
-  style: {
-    //push to CSS or display inline?
-    font: 'Arial',
-    fontSize: '1em',
-    fontColor: 'black',
-    bgColor: 'white',
-    clockWidth: '80px'
-  },
   format: {
-    clock12Hr: false,
+    clock12Hr: false, //not used, not implemented
     showSeconds: true
   },
   days: [
@@ -123,7 +116,6 @@ function find1stSun(hour, month, year) {
   var monthDayStart = utilMonth.getUTCDay();
   var daysInMonth = getMonthLen(utilMonth);
   var target;
-  //find lowest UTCdate where day === 0
   for (var i = 0; i < daysInMonth; i++) {
     if (monthDayStart + i === 0 || monthDayStart + i === 7) {
       target = i + 1;
@@ -139,7 +131,6 @@ function find2ndSun(hour, month, year) {
   var monthDayStart = utilMonth.getUTCDay();
   var daysInMonth = getMonthLen(utilMonth);
   var target;
-  //find 2nd lowest UTCdate where day === 0
   for (var i = 7; i < daysInMonth; i++) {
     if (monthDayStart + i === 8 || monthDayStart + i === 14) {
       target = i + 1;
@@ -152,7 +143,6 @@ function find2ndSun(hour, month, year) {
 
 function findLastSun(hour, month, year) {
   var utilMonth = new Date(year, month);
-  var monthDayStart = utilMonth.getUTCDay();
   var daysInMonth = getMonthLen(utilMonth);
   var lastSun = new Date(utilMonth.getUTCFullYear(), month, daysInMonth);
   var target = lastSun.getUTCDate() - lastSun.getUTCDay();
@@ -162,22 +152,87 @@ function findLastSun(hour, month, year) {
 //Set time for each of WC_Clocks
 function setTime() {
   var date = WC_Date;
-  var month = date.getUTCMonth();
-  var dayOfWeek = date.getUTCDay(); //0 == Sunday
-  var dayOfMonth = date.getUTCDate();
-  var hour = date.getUTCHours();
-  WC_Clocks.forEach(function(clock) {
-    var savings = 0;
-    if (clock.savingsTime === 'none') {
+  WC_Clocks.forEach(function(c) {
+    if (c.savingsTime === 'none') {
     } else {
-      //find matching start/stop dates in WC_display.savingsTime
-      //getTime() on them. if start<=today<end, then savings=1
+      var savingsGroup = c.savingsTime;
+      var savingsStart = WC_display.savingsTime[savingsGroup].startDay;
+      var savingsEnd = WC_display.savingsTime[savingsGroup].endDay;
+      if (
+        date.getTime() > savingsStart.getTime() &&
+        date.getTime() < savingsEnd.getTime()
+      ) {
+        savings = 1;
+      }
     }
-    var clockTime = new Date(date.getTime() + clock.offset * 3600000 + savings);
-    clock.month = clockTime.getUTCMonth();
-    clock.day = clockTime.getUTCDay();
-    clock.hour = clockTime.getUTCHours();
-    clock.minute = clockTime.getUTCMinutes();
-    clock.second = clockTime.getUTCSeconds();
+
+    var cTime = new Date(date.getTime() + (c.offset + savings) * 3600000);
+    c.year = cTime.getUTCFullYear();
+    c.mon = cTime.getUTCMonth();
+    c.date = cTime.getUTCDate();
+    if (c.date < 10) {
+      c.date = String(0) + c.date.toString();
+    }
+    c.day = cTime.getUTCDay();
+    c.hr = cTime.getUTCHours();
+    if (c.hr < 10) {
+      c.hr = String(0) + c.hr.toString();
+    }
+    c.min = cTime.getUTCMinutes();
+    if (c.min < 10) {
+      c.min = String(0) + c.min.toString();
+    }
+    c.sec = cTime.getUTCSeconds();
+    if (c.sec < 10) {
+      c.sec = String(0) + c.sec.toString();
+    }
+    c.timeString = c.hr + ':' + c.min;
+    if (WC_display.format.showSeconds) {
+      c.timeString += ':' + c.sec;
+    }
+    c.timeString += ' ' + c.region[savings];
+    //Got to deal with Afghanistan's 30min difference
+    if (c.offset % 1 != 0) {
+      var oddOffset = ' ' + Math.floor(c.offset + savings) + ':';
+      oddOffset += (c.offset % 1) * 60;
+      c.timeString += oddOffset;
+    } else {
+      c.timeString += ' ' + (c.offset + savings) + ':00';
+    }
+    c.dateString =
+      WC_display.days[c.day][1] +
+      ', ' +
+      c.date +
+      ' ' +
+      WC_display.months[c.mon][0] +
+      ', ' +
+      c.year;
   });
 }
+
+function buildClocks(clocks) {
+  var allClocks = '';
+  clocks.forEach(function(c) {
+    var cDiv = '<div class="clock">';
+    var cRegion = '<div class="clockRegion">' + c.location + '</div>';
+    var cTime = '<div class="clockTime">' + c.timeString + '</div>';
+    var cDate = '<div class="clockDate">' + c.dateString + '</div>';
+    cDiv += cRegion + cTime + cDate + '</div>';
+    allClocks += cDiv;
+  });
+  var clockContainer = document.getElementById('clocks');
+  clockContainer.innerHTML = allClocks;
+}
+
+//instead of rebuilding the clock div
+//could do innerText for div clockTime
+
+function run() {
+  setTime();
+  buildClocks(WC_Clocks);
+  WC_Date = new Date();
+  setTimeout(run, 250); //working with IE9 and avoiding polyfill
+  //alternative would be to watch the second then rAF on change
+}
+
+run();

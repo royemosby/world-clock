@@ -103,7 +103,7 @@ textarea {
    ========================================================================== */
 
 body {
-  font-family: 'Cinzel Decorative', cursive;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 h1,
@@ -122,4 +122,25 @@ h1 {
 header {
   display: flex;
   justify-content: center;
+}
+
+#clocks {
+  display: flex;
+}
+
+.clock {
+  display: inline-block;
+  margin: 5px;
+  text-align: center;
+  width: 20%;
+}
+
+.clockRegion {
+  font-size: 1.1em;
+}
+
+.clockRegion,
+.clockTime,
+.clockDate {
+  display: block;
 }
