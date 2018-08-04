@@ -1,2 +1,4 @@
 # world-clock
-insert multiple clocks onto a page using vanilla JavaScript
+## Inserts multiple clocks onto a page using vanilla Javascript.
+
+
