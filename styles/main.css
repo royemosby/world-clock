@@ -1,91 +1,6 @@
-/*! HTML5 Boilerplate v6.0.1 | MIT License | https://html5boilerplate.com/ */
-
-/*
- * What follows is the result of much research on cross-browser styling.
- * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
- * Kroc Camen, and the H5BP dev community and team.
- */
-
-/* ==========================================================================
-   Base styles: opinionated defaults
-   ========================================================================== */
-
-html {
-  color: #222;
-  font-size: 1em;
-  line-height: 1.4;
-}
-
-/*
- * Remove text-shadow in selection highlight:
- * https://twitter.com/miketaylr/status/12228805301
- *
- * Vendor-prefixed and regular ::selection selectors cannot be combined:
- * https://stackoverflow.com/a/16982510/7133471
- *
- * Customize the background color to match your design.
- */
-
-::-moz-selection {
-  background: #b3d4fc;
-  text-shadow: none;
-}
-
-::selection {
-  background: #b3d4fc;
-  text-shadow: none;
-}
-
-/*
- * A better looking default horizontal rule
- */
-
-hr {
-  display: block;
-  height: 1px;
-  border: 0;
-  border-top: 1px solid #ccc;
-  margin: 1em 0;
-  padding: 0;
-}
-
-/*
- * Remove the gap between audio, canvas, iframes,
- * images, videos and the bottom of their containers:
- * https://github.com/h5bp/html5-boilerplate/issues/440
- */
-
-audio,
-canvas,
-iframe,
-img,
-svg,
-video {
-  vertical-align: middle;
-}
-
-/*
- * Remove default fieldset styles.
- */
-
-fieldset {
-  border: 0;
-  margin: 0;
-  padding: 0;
-}
-
-/*
- * Allow only vertical resizing of textareas.
- */
-
-textarea {
-  resize: vertical;
-}
-
 /* ==========================================================================
     Helper classes
    ========================================================================== */
-
 .clearfix:before,
 .clearfix:after {
   content: " ";
@@ -101,8 +16,25 @@ textarea {
 /* ==========================================================================
     Author's custom styles
    ========================================================================== */
+html,
+body {
+  height: 100%;
+}
+
+html {
+  font-size: 1.3em;
+  line-height: 1.4;
+}
 
 body {
+  background-color: #04111a;
+  background-image: url(/images/lena-bell-68534-unsplash.jpg);
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  color: #fae6c1;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -111,28 +43,56 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Cinzel Decorative', serif;
 }
 
 h1 {
-  color: rgb(58, 123, 146);
+  color: rgb(91, 157, 213);
+  filter: drop-shadow(0 0 3px black);
   font-size: 6em;
+  font-weight: bold;
 }
 
-header {
-  display: flex;
+main {
+  flex: 1 0 auto;
+}
+
+header,
+footer {
   justify-content: center;
+  text-align: center;
+}
+
+footer {
+  flex-shrink: 0;
+}
+
+a {
+  color: #fae6c1;
+}
+
+a:hover {
+  color: #f5be61;
 }
 
 #clocks {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 25px;
   display: flex;
+  filter: drop-shadow(0 0 5px black);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: auto 20px;
 }
 
 .clock {
   display: inline-block;
-  margin: 5px;
+  margin: 5px 5px 30px 5px;
+  max-width: 200px;
   text-align: center;
-  width: 20%;
+  filter: drop-shadow(0 0 5px black);
+  flex-grow: 1;
+  padding: 20px 0;
 }
 
 .clockRegion {
@@ -143,4 +103,42 @@ header {
 .clockTime,
 .clockDate {
   display: block;
+}
+
+.credit {
+  flex: 1 0 auto;
+}
+
+@media screen and (max-width: 1199px) {
+  html {
+    font-size: 1em;
+    line-height: 1.4;
+  }
+
+  h1 {
+    font-size: 5em;
+  }
+}
+
+@media screen and (max-width: 767px) {
+
+  html,
+  body {
+    height: auto;
+  }
+
+  h1 {
+    font-size: 4em;
+  }
+
+  .clock {
+    margin: 5px;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  #clocks {
+    border-radius: 0;
+    margin: 0;
+  }
 }
