@@ -23,7 +23,7 @@ Use standard time zones for the offset. Daylight savings time is picked up by 4 
 ## [Credit](https://github.com/egomadking/world-clock#credit)
 
 Inspired by"Live Clock" script (3.0) by Mark Plachetta (astroboy@zip.com.au)
-http://www.zip.com.au/~astroboy/liveclock/
+[http://www.zip.com.au/~astroboy/liveclock/](http://www.zip.com.au/~astroboy/liveclock/)
 _link dead but saved for posterity_
 
 ## [To-do](https://github.com/egomadking/world-clock#to-do)
