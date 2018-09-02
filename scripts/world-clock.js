@@ -25,27 +25,63 @@ var WC_Clocks = [
   },
   {
     region: ['EST', 'EDT'],
-    location: 'Shaw AFB',
+    location: 'New York, NY',
     offset: -5,
     savingsTime: 'group1'
   },
   {
     region: ['PST', 'PDT'],
-    location: 'Travis AFB',
+    location: 'San Diego, CA',
     offset: -8,
     savingsTime: 'group1'
   },
   {
-    region: ['AT', 'AT'],
-    location: 'Al Udeid',
+    region: ['HST', 'HST'],
+    location: 'Honolulu, HI',
+    offset: -10,
+    savingsTime: 'none'
+  },
+  {
+    region: ['NZST', 'NZDT'],
+    location: 'Aukland, NZ',
+    offset: 12,
+    savingsTime: 'group4'
+  },
+  {
+    region: ['ACST', 'ACT'],
+    location: 'Alice Springs, AU',
+    offset: 9.5,
+    savingsTime: 'none'
+  },
+  {
+    region: ['CST', 'CST'],
+    location: 'Bejing, CN',
+    offset: 8,
+    savingsTime: 'group3'
+  },
+  {
+    region: ['IST', 'IST'],
+    location: 'New Delhi, IN',
+    offset: 5.5,
+    savingsTime: 'none'
+  },
+  {
+    region: ['AST', 'AST'],
+    location: 'Doha, QA',
     offset: 3,
     savingsTime: 'none'
   },
   {
-    region: ['AFT', 'AFT'],
-    location: 'Kabul',
-    offset: 4.5,
-    savingsTime: 'none'
+    region: ['EET', 'EEST'],
+    location: 'Nicosia, CY',
+    offset: 2,
+    savingsTime: 'group2'
+  },
+  {
+    region: ['CET', 'CEST'],
+    location: 'Paris, FR',
+    offset: 1,
+    savingsTime: 'group2'
   }
 ];
 
@@ -152,6 +188,7 @@ function setTime() {
   var date = WC_Date;
   WC_Clocks.forEach(function(c) {
     if (c.savingsTime === 'none') {
+      savings = 0;
     } else {
       var savingsGroup = c.savingsTime;
       var savingsStart = WC_display.savingsTime[savingsGroup].startDay;
