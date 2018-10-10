@@ -21,74 +21,74 @@ var WC_Clocks = [
     region: ['UTC', 'UTC'],
     location: 'UTC',
     offset: 0,
-    savingsTime: 'none'
+    savingsTime: 'none',
   },
   {
     region: ['EST', 'EDT'],
     location: 'New York, NY',
     offset: -5,
-    savingsTime: 'group1'
+    savingsTime: 'group1',
   },
   {
     region: ['PST', 'PDT'],
     location: 'San Diego, CA',
     offset: -8,
-    savingsTime: 'group1'
+    savingsTime: 'group1',
   },
   {
     region: ['HST', 'HST'],
     location: 'Honolulu, HI',
     offset: -10,
-    savingsTime: 'none'
+    savingsTime: 'none',
   },
   {
     region: ['NZST', 'NZDT'],
     location: 'Aukland, NZ',
     offset: 12,
-    savingsTime: 'group4'
+    savingsTime: 'group4',
   },
   {
     region: ['ACST', 'ACT'],
     location: 'Alice Springs, AU',
     offset: 9.5,
-    savingsTime: 'none'
+    savingsTime: 'none',
   },
   {
     region: ['CST', 'CST'],
     location: 'Bejing, CN',
     offset: 8,
-    savingsTime: 'group3'
+    savingsTime: 'none',
   },
   {
     region: ['IST', 'IST'],
     location: 'New Delhi, IN',
     offset: 5.5,
-    savingsTime: 'none'
+    savingsTime: 'none',
   },
   {
     region: ['AST', 'AST'],
     location: 'Doha, QA',
     offset: 3,
-    savingsTime: 'none'
+    savingsTime: 'none',
   },
   {
     region: ['EET', 'EEST'],
     location: 'Nicosia, CY',
     offset: 2,
-    savingsTime: 'group2'
+    savingsTime: 'group2',
   },
   {
     region: ['CET', 'CEST'],
     location: 'Paris, FR',
     offset: 1,
-    savingsTime: 'group2'
-  }
+    savingsTime: 'group2',
+  },
 ];
 
 var WC_display = {
   format: {
     clock12Hr: false, //not used, not implemented
-    showSeconds: true
+    showSeconds: true,
   },
   days: [
     ['Sunday', 'Sun'],
@@ -97,7 +97,7 @@ var WC_display = {
     ['Wednesday', 'Wed'],
     ['Thursday', 'Thu'],
     ['Friday', 'Fri'],
-    ['Saturday', 'Sat']
+    ['Saturday', 'Sat'],
   ],
   months: [
     ['January', 'Jan'],
@@ -111,7 +111,7 @@ var WC_display = {
     ['September', 'Sep'],
     ['October', 'Oct'],
     ['November', 'Nov'],
-    ['December', 'Dec']
+    ['December', 'Dec'],
   ],
   // time zone reference
   // https://en.wikipedia.org/wiki/Template:Daylight_saving_in_time_zone/techdoc
@@ -119,24 +119,24 @@ var WC_display = {
     group1: {
       //HAT, AKT, PT, MT, CT, ET, AT, NT
       startDay: find2ndSun(2, 2, WC_Year), //2AM 2nd Sun in Mar
-      endDay: find1stSun(2, 10, WC_Year) //2AM 1st Sun in Nov
+      endDay: find1stSun(2, 10, WC_Year), //2AM 1st Sun in Nov
     },
     group2: {
       //WET, CET, EET
       startDay: findLastSun(1, 2, WC_Year), //1AM last Sunday in Mar
-      endDay: findLastSun(1, 9, WC_Year) //1AM last Sunday in Oct
+      endDay: findLastSun(1, 9, WC_Year), //1AM last Sunday in Oct
     },
     group3: {
       //ACT, AET
       startDay: find1stSun(2, 9, WC_Year), //2AM 1st Sunday in Oct
-      endDay: find1stSun(2, 3, WC_Year + 1) //2AM 1st Sunday in Apr
+      endDay: find1stSun(2, 3, WC_Year + 1), //2AM 1st Sunday in Apr
     },
     group4: {
       //NZT
       startDay: findLastSun(2, 8, WC_Year), //2AM last Sunday in Sep
-      endDay: find1stSun(3, 3, WC_Year + 1) //3AM 1st Sunday in Apr
-    }
-  }
+      endDay: find1stSun(3, 3, WC_Year + 1), //3AM 1st Sunday in Apr
+    },
+  },
 };
 
 //Establish start/end days for DST
