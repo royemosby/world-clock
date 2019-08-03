@@ -30,6 +30,6 @@ _link dead but saved for posterity_
 
 - 12hr/24hr option
 - show seconds option
-- full month/ abreviated month option
-- full day/ abreviated day option
+- full month/ abbreviated month option
+- full day/ abbreviated day option
 - separate build clocks from update clocks
